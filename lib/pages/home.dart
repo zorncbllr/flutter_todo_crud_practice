@@ -3,7 +3,7 @@ import 'package:flutter_todo_crud_practice/utils/input-bar.dart';
 import 'package:flutter_todo_crud_practice/utils/todo.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   _HomeState createState() => _HomeState();
@@ -33,10 +33,9 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white12,
         foregroundColor: Colors.white,
       ),
-
-      // todo list
       body: Column(
         children: [
+          // todo list
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.all(8),
