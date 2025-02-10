@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_crud_practice/utils/todo.dart';
 
 class DialogBox extends StatefulWidget {
   DialogBox({
@@ -36,6 +35,7 @@ class _DialogBoxState extends State<DialogBox> {
             Expanded(child: SizedBox()),
             TextField(
               controller: widget.controller,
+              onSubmitted: (_) => widget.onCreate(),
               decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
