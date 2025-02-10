@@ -29,9 +29,10 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white12,
       appBar: AppBar(
-        title: Text('Todo App'),
+        title: Text('TO DO'),
+        centerTitle: true,
         backgroundColor: Colors.white12,
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.white60,
       ),
       body: Column(
         children: [
