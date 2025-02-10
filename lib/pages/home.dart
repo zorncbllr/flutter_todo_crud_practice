@@ -10,12 +10,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Todo> todoList = [
-    Todo(task: 'Learn web development.'),
-    Todo(task: 'Learn mobile development with flutter.'),
+  List<dynamic> todoList = [
+    ['Learn mobile development', false],
+    ['Learn rust-solana development', true],
   ];
 
   TextEditingController controller = TextEditingController();
+
+  void changeTodoState(int index) {
+    setState(() {
+      todoList[index][1] = !todoList[index][1];
+    });
+  }
+
+  void deleteTodo(int index) {
+    setState(() {
+      todoList.removeAt(index);
+    });
+  }
 
   void createNewTodo() {
     showDialog(
@@ -23,7 +35,7 @@ class _HomeState extends State<Home> {
       builder: (context) {
         void addTodo() {
           setState(() {
-            todoList.add(Todo(task: controller.text));
+            todoList.add([controller.text, false]);
             controller.clear();
             Navigator.of(context).pop();
           });
@@ -59,7 +71,12 @@ class _HomeState extends State<Home> {
         child: ListView.builder(
           padding: EdgeInsets.all(12),
           itemCount: todoList.length,
-          itemBuilder: (context, index) => todoList[index],
+          itemBuilder: (context, index) => Todo(
+            task: todoList[index][0],
+            completed: todoList[index][1],
+            onStateChanged: (_) => changeTodoState(index),
+            onDelete: (_) => deleteTodo(index),
+          ),
         ),
       ),
 

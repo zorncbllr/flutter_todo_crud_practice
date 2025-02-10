@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Todo extends StatefulWidget {
   String task;
   bool completed;
-  bool marked;
+  Function(bool?) onStateChanged;
+  Function(BuildContext context) onDelete;
 
   Todo({
     super.key,
     required this.task,
-    this.completed = false,
-    this.marked = false,
+    required this.completed,
+    required this.onDelete,
+    required this.onStateChanged,
   });
 
   @override
@@ -19,31 +22,47 @@ class Todo extends StatefulWidget {
 class _TodoState extends State<Todo> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white12,
-      ),
-      child: Row(
-        children: [
-          Checkbox(
-            activeColor: Colors.deepOrangeAccent,
-            value: widget.completed,
-            onChanged: (value) {
-              setState(() {
-                widget.completed = !widget.completed;
-              });
-            },
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Slidable(
+        endActionPane: ActionPane(
+          motion: StretchMotion(),
+          children: [
+            SlidableAction(
+              onPressed: widget.onDelete,
+              icon: Icons.delete,
+              backgroundColor: Colors.deepOrangeAccent,
+              borderRadius: BorderRadius.circular(12),
+            )
+          ],
+        ),
+
+        // todo container
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 8,
           ),
-          Text(
-            widget.task,
-            style: TextStyle(
-              color: Colors.white,
-            ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            color: Colors.white12,
           ),
-        ],
+          child: Row(
+            children: [
+              Checkbox(
+                activeColor: Colors.deepOrangeAccent,
+                value: widget.completed,
+                onChanged: widget.onStateChanged,
+              ),
+              Text(
+                widget.task,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
