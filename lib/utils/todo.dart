@@ -20,7 +20,7 @@ class _TodoState extends State<Todo> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 8),
+      margin: EdgeInsets.only(bottom: 12),
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),

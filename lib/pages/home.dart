@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo_crud_practice/utils/input-bar.dart';
+import 'package:flutter_todo_crud_practice/utils/dialog_box.dart';
 import 'package:flutter_todo_crud_practice/utils/todo.dart';
 
 class Home extends StatefulWidget {
@@ -18,10 +18,20 @@ class _HomeState extends State<Home> {
   TextEditingController controller = TextEditingController();
 
   void createNewTodo() {
-    setState(() {
-      todoList.add(Todo(task: controller.text));
-      controller.clear();
-    });
+    showDialog(
+      context: context,
+      builder: (context) {
+        return DialogBox(
+          controller: controller,
+          onCreate: () {
+            setState(() {
+              todoList.add(Todo(task: controller.text));
+              controller.clear();
+            });
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -34,23 +44,24 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white12,
         foregroundColor: Colors.white60,
       ),
-      body: Column(
-        children: [
-          // todo list
-          Expanded(
-            child: ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount: todoList.length,
-              itemBuilder: (context, index) => todoList[index],
-            ),
-          ),
 
-          // textfield bar
-          InputBar(
-            controller: controller,
-            createNewTodo: createNewTodo,
-          )
-        ],
+      // todo list
+      body: Expanded(
+        child: ListView.builder(
+          padding: EdgeInsets.all(12),
+          itemCount: todoList.length,
+          itemBuilder: (context, index) => todoList[index],
+        ),
+      ),
+
+      // add button
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepOrangeAccent,
+        onPressed: createNewTodo,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
       ),
     );
   }
