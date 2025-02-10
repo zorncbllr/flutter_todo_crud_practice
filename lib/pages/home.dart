@@ -1,53 +1,69 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo_crud_practice/data/database.dart';
 import 'package:flutter_todo_crud_practice/utils/dialog_box.dart';
 import 'package:flutter_todo_crud_practice/utils/todo.dart';
+import 'package:hive/hive.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  List<dynamic> todoList = [
-    ['Learn mobile development', false],
-    ['Learn rust-solana development', true],
-  ];
+  final _mybox = Hive.box('mybox');
 
-  TextEditingController controller = TextEditingController();
+  TodoDatabase db = TodoDatabase();
 
-  void changeTodoState(int index) {
-    setState(() {
-      todoList[index][1] = !todoList[index][1];
-    });
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    if (_mybox.get('TODOLIST') == null) {
+      db.createInitialData();
+    } else {
+      db.loadData();
+    }
+
+    super.initState();
   }
 
-  void deleteTodo(int index) {
+  void _changeTodoState(int index) {
     setState(() {
-      todoList.removeAt(index);
+      db.todoList[index][1] = !db.todoList[index][1];
     });
+    db.updateDatase();
   }
 
-  void createNewTodo() {
+  void _deleteTodo(int index) {
+    setState(() {
+      db.todoList.removeAt(index);
+    });
+    db.updateDatase();
+  }
+
+  void _createNewTodo() {
     showDialog(
       context: context,
       builder: (context) {
         void addTodo() {
           setState(() {
-            todoList.add([controller.text, false]);
-            controller.clear();
+            db.todoList.add([_controller.text, false]);
+            _controller.clear();
             Navigator.of(context).pop();
           });
+          db.updateDatase();
         }
 
         void onCancel() {
-          controller.clear();
+          _controller.clear();
           Navigator.of(context).pop();
         }
 
         return DialogBox(
-          controller: controller,
+          controller: _controller,
           onSubmit: addTodo,
           onCancel: onCancel,
         );
@@ -70,12 +86,12 @@ class _HomeState extends State<Home> {
       body: Expanded(
         child: ListView.builder(
           padding: EdgeInsets.all(12),
-          itemCount: todoList.length,
+          itemCount: db.todoList.length,
           itemBuilder: (context, index) => Todo(
-            task: todoList[index][0],
-            completed: todoList[index][1],
-            onStateChanged: (_) => changeTodoState(index),
-            onDelete: (_) => deleteTodo(index),
+            task: db.todoList[index][0],
+            completed: db.todoList[index][1],
+            onStateChanged: (_) => _changeTodoState(index),
+            onDelete: (_) => _deleteTodo(index),
           ),
         ),
       ),
@@ -83,7 +99,7 @@ class _HomeState extends State<Home> {
       // add button
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepOrangeAccent,
-        onPressed: createNewTodo,
+        onPressed: _createNewTodo,
         child: Icon(
           Icons.add,
           color: Colors.white,
