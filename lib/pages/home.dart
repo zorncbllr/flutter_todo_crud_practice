@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
         title: Text('TO DO'),
         centerTitle: true,
         backgroundColor: Colors.white12,
-        foregroundColor: Colors.white60,
+        foregroundColor: Colors.white,
       ),
 
       // todo list
@@ -98,11 +98,11 @@ class _HomeState extends State<Home> {
 
       // add button
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.white12,
         onPressed: _createNewTodo,
         child: Icon(
           Icons.add,
-          color: Colors.white,
+          color: Colors.deepOrangeAccent,
         ),
       ),
     );
