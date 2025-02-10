@@ -18,19 +18,26 @@ class _HomeState extends State<Home> {
   TextEditingController controller = TextEditingController();
 
   void createNewTodo() {
-    void addTodo() {
-      setState(() {
-        todoList.add(Todo(task: controller.text));
-        controller.clear();
-      });
-    }
-
     showDialog(
       context: context,
       builder: (context) {
+        void addTodo() {
+          setState(() {
+            todoList.add(Todo(task: controller.text));
+            controller.clear();
+            Navigator.of(context).pop();
+          });
+        }
+
+        void onCancel() {
+          controller.clear();
+          Navigator.of(context).pop();
+        }
+
         return DialogBox(
           controller: controller,
-          onCreate: addTodo,
+          onSubmit: addTodo,
+          onCancel: onCancel,
         );
       },
     );
